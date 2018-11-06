@@ -7,10 +7,13 @@
   "author": "Aaron Ross <superhawk610@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "parcel ./src/index.pug",
-    "dev": "parcel serve ./src/index.pug"
+    "build": "NODE_ENV=production parcel build ./src/index.pug --public-url ./",
+    "dev": "parcel serve ./src/index.pug",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "gh-pages": "^2.0.1",
     "normalize.css": "^8.0.0",
     "parcel-bundler": "^1.10.3",
     "parcel-plugin-markdown": "https://github.com/mikehenrty/parcel-plugin-markdown#upgrade-asset"
