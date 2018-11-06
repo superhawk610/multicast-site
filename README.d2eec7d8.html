@@ -1,0 +1,145 @@
+<h1 id="multicast-v2-0">MultiCast v2.0</h1>
+<p><a href="https://badge.fury.io/js/multicast"><img src="https://badge.fury.io/js/multicast.svg" alt="npm version"></a>
+<a href="https://travis-ci.org/superhawk610/multicast"><img src="https://travis-ci.org/superhawk610/multicast.svg" alt="Build Status"></a></p>
+<p>:green_heart: A persistent solution to presenting content across multiple Chromecast devices, inspired by <a href="http://greenscreen.io/">Greenscreen</a>.</p>
+<p>Developed with Node, Express, and Mongo.</p>
+<h2 id="usage">Usage</h2>
+<h3 id="home">Home</h3>
+<p><img src="/home.790c132f.png" alt="home"></p>
+<p>From the home page, you can manage displays via Chromecasts, manage all available content via Channels, create and trigger alerts via Push Alerts, or takeover all display by starting a Takeover.</p>
+<h3 id="channels">Channels</h3>
+<p><img src="/channels.c18e84c6.png" alt="channels"></p>
+<p>All content is managed via Channels, which are unique URLs that can be assigned to each individual device. There is no limit on the number of Channels you can have available at any one time, and you can freely switch between them on a per-device basis.</p>
+<p>To access Channels, select Channels from the homepage, or click Channels in the top right of the interface.</p>
+<p><img src="/channel.00a3efb0.png" alt="channel"></p>
+<p>A channel consists of a Name and Layout. The channel&#39;s name will be used to refer to it throughout the interface, but will never be displayed on the actual device when it is being cast. The channel&#39;s layout allows one or more URLs to be embedded (via iframe) into the page that will be cast. Two layouts are provided, though creating additional layouts is not especially difficult (see <a href="#creating-layouts">Creating Layouts</a>).</p>
+<h3 id="devices">Devices</h3>
+<p><img src="/devices.9a9ed974.png" alt="devices"></p>
+<p>Chromecast devices are now interfaced with as mDNS devices via the new <a href="https://github.com/thibauts/node-castv2">Castv2 API</a>. This removes the Chrome/Chromium browser restriction that previously existed with Chromecast devices, and even allows Multicast to be run remotely from a headless server (see <a href="#setup">Setup</a>).</p>
+<p>All Chromecast devices on the same network as the host will display here. Devices can be <em>registered</em> to be activated as Multicast receivers and assigned a channel, receive push alerts, and so on.</p>
+<p>To register a device, click on the device&#39;s name or click Register Chromecast.</p>
+<p><img src="/register.75bdba58.png" alt="register"></p>
+<p>A device&#39;s name will be whatever the Chromecast&#39;s name was when it was set up. A device&#39;s Location can be set to anything you would like to clarify where it is located. Make sure to choose something descriptive, as this will make Channel management easier down the line.</p>
+<p>You can choose not to select a Channel when registering a device - doing so will leave the device on the default registration screen until a Channel is selected.</p>
+<p><img src="/device.057dd543.png" alt="device"></p>
+<p>Once a device has been registered, you can select its name from the Devices list to change the Channel it is displaying, refresh its Channel content, or Reconnect it if loses connection.</p>
+<h3 id="push-alerts">Push Alerts</h3>
+<p><img src="/push.27de891d.png" alt="push"></p>
+<p>Push Alerts are useful for displaying small pieces of information to all receiver devices. Alerts will begin displaying on all connected receivers as soon as they are created, and will continue to display until their set duration is reached or the receiver is reset.</p>
+<h3 id="channel-takeover">Channel Takeover</h3>
+<p><img src="/takeover.f3e6ce93.png" alt="takeover"></p>
+<p>A Channel Takeover allows all receiver devices to be temporarily, indefinitely redirected to a single channel. A Takeover will begin immediately after it is started, and will last until it is manually stopped from the homepage.</p>
+<p><em>*Takeovers will also affect devices that are registered after they have begun.</em></p>
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>This project requires Node.js and NPM (bundled with Node), as well as a MongoDB server. Since Node is cross-platform, it should work on Windows, MacOS, and Linux.</p>
+<p>This project depends on <a href="https://github.com/agnat/node_mdns">node_mdns</a>, which in turn requires a mDNS stack. Follow the installation instructions <a href="https://github.com/agnat/node_mdns#installation">here</a> for whichever platform you are on to install a mDNS stack. If you&#39;re on Linux, this is as simple as</p>
+<h4 id="debian-ubuntu">Debian/Ubuntu</h4>
+<pre><code class="language-shell">sudo apt-get install build-essential libavahi-compat-libdnssd-dev</code></pre>
+<h4 id="redhat-fedora-centos">RedHat/Fedora/CentOS</h4>
+<pre><code class="language-shell">sudo yum install gcc gcc-c++ avahi avahi-compat-libdns_sd avahi-compat-libdns_sd-devel nss_mdns</code></pre>
+<h3 id="setup">Setup</h3>
+<p>If you don&#39;t already have access to a MongoDB server installation, follow the guide <a href="https://docs.mongodb.com/manual/administration/install-community/">here</a>.</p>
+<p>Grab the latest stable copy of Node/NPM from <a href="https://nodejs.org/en/download/">here</a> or install it via <a href="http://nvm.sh">nvm</a>.</p>
+<p>In order to access the Chromecast API, you need to <a href="https://cast.google.com/publish/">register as a Cast developer</a> (it costs $5).</p>
+<p>Once you&#39;ve done this, log in to the <a href="https://cast.google.com/u/1/publish/#/overview">Cast Developer SDK Console</a> and click <strong>Add New Application</strong>. Choose <strong>Custom Receiver</strong>, then name it <code>Multicast</code> and set the <strong>Receiver Application URL</strong> to <code>http://YOUR_LOCAL_IP:3944/landing</code>. Disable <strong>Guest Mode</strong> and then <strong>Save</strong>.</p>
+<p><strong>NOTE:</strong> Make sure to use your LAN IP here (192.168.1.xx or similar), not your WAN/external IP. This should resolve to your server only within your local network.</p>
+<p>You now need to register your Chromecast devices as developer devices. For each device, locate the Serial Number (located on the back of the device and on the box), click <strong>Add New Device</strong>, and enter the Serial Number and a brief Description. (<strong>NOTE</strong>: This may take up to 15 minutes to take effect. Go grab a cup of coffee and then head back.)</p>
+<p>Installation is a snap with NPM.</p>
+<pre><code class="language-shell">npm i multicast -g
+multicast config
+multicast start</code></pre>
+<p>Head over to <code>http://YOUR_LOCAL_IP:3944/</code> in your browser to get started, then simply follow the <a href="#usage">Usage</a> guide to get off the ground.</p>
+<p>For development, you can install locally via Github - clone this repository to your local machine, then head into the cloned directory and create a <code>.config</code> file for your setup.</p>
+<pre><code class="language-shell">git clone https://github.com/superhawk610/multicast
+cd multicast
+cp .config.template .config
+vim .config</code></pre>
+<p><strong>NOTE</strong>: You should leave <code>mongoAuthSource</code> and <code>mongoPort</code> set to their default unless you know what you&#39;re doing.</p>
+<p>Install Node modules</p>
+<pre><code class="language-shell">npm install</code></pre>
+<p>Build files using Gulp</p>
+<pre><code class="language-shell">gulp</code></pre>
+<p>Run the application</p>
+<pre><code class="language-shell">node .</code></pre>
+<h3 id="firewall-settings">Firewall Settings</h3>
+<p>In order for a Chromecast to establish and maintain a connection with a Cast sender, the sender must open two ports:</p>
+<pre><code class="language-html">1900/UDP    (DIAL)
+5353/UDP    (mDNS)</code></pre>
+<p>Make sure that the device running MultiCast has these ports open, as well as the standard HTTP ports</p>
+<pre><code class="language-html">80/TCP/UDP  (HTTP)
+443/TCP/UDP (HTTPS)</code></pre>
+<h3 id="flags">Flags</h3>
+<p><code>--serve-only</code> - Do not attempt to connect to any devices, just serve files via Express. Useful for debugging.</p>
+<h2 id="having-trouble-">Having Trouble?</h2>
+<h3 id="common-errors">Common Errors</h3>
+<pre><code class="language-html">*** WARNING *** The program &#39;nodejs&#39; uses the Apple Bonjour compatibility layer of Avahi.
+*** WARNING *** Please fix your application to use the native API of Avahi!
+*** WARNING *** For more information see http://0pointer.de/avahi-compat?s=libdns_sd&amp;e=nodejs
+*** WARNING *** The program &#39;nodejs&#39; called &#39;DNSServiceRegister()&#39; which is not supported (or only supported partially) in the Apple Bonjour compatibility layer of Avahi.
+*** WARNING *** Please fix your application to use the native API of Avahi!
+*** WARNING *** For more information see http://0pointer.de/avahi-compat?s=libdns_sd&amp;e=nodejs&amp;f=DNSServiceRegister</code></pre>
+<p>Don&#39;t worry about this. This warning shows up in all Node apps on Linux that depend on <code>libavahi-compat-libdnssd-dev</code>. You can safely ignore it.</p>
+<p><strong>Can&#39;t launch after installing via NPM?</strong>
+Make sure your <code>NODE_PATH</code> environment variable correctly includes the global store for node dependencies. On Linux:</p>
+<pre><code class="language-shell">export NODE_PATH=/opt/lib/node_modules</code></pre>
+<p><strong>Multicast can&#39;t find your devices?</strong>
+Make sure they&#39;ve already been setup and powered on and the display that they&#39;re connected to is powered on and displaying their output.</p>
+<p>If you can view them from other Cast-enabled apps but not from Multicast, its likely an issue with your firewall. Make sure you configured your firewall correctly (see <a href="#firewall-settings">Firewall Settings</a>).</p>
+<p><strong>Using Node 8.6+?</strong></p>
+<p><strong>EDIT:</strong> This has been patched as of node_mdns 2.3.4. This fix is no longer required.</p>
+<p>The most recent version of node_mdns has an incompatibility with v8.6 due to changed syntax for a method (see <a href="https://github.com/agnat/node_mdns/pull/200">this pull request</a>). Until it is fixed in the main branch, you will need to patch it yourself. Edit <code>node_modules/mdns/lib/resolver_sequence_tasks.js</code> and make the following change (roughly line 115):</p>
+<pre><code class="language-diff">
+   function getaddrinfo_0_11(host, family, cb) {
+     var req = new cares.GetAddrInfoReqWrap()
+-      , err = cares.getaddrinfo(req, host, family)
++      , err = cares.getaddrinfo(req, host, family, 0, false)
+       ;
+     req.oncomplete = function oncomplete(err, addresses) {
+         getaddrinfo_complete(err, addresses, cb);
+</code></pre>
+<p><strong>Running CentOS and Seeing This Error?</strong></p>
+<pre><code class="language-shell">Error: getaddrinfo -3008</code></pre>
+<p>Make sure you have <code>nss_mdns</code> installed:</p>
+<pre><code class="language-shell">sudo yum install nss_mdns</code></pre>
+<h3 id="issues">Issues</h3>
+<p>If you run into any problems while using this, please report them <a href="https://github.com/superhawk610/multicast/issues">here</a>.</p>
+<h2 id="authors">Authors</h2>
+<p><img src="https://avatars0.githubusercontent.com/u/18172185?v=4&s=32" alt="superhawk610"> Aaron Ross - <em>author</em> - <a href="https://github.com/superhawk610">superhawk610</a></p>
+<p><img src="https://avatars0.githubusercontent.com/u/8389366?v=4&s=32" alt="Brekmister"> <a href="https://github.com/Brekmister">Brekmister</a> - <em>contributor</em></p>
+<p><img src="https://avatars0.githubusercontent.com/u/9255772?v=4&s=32" alt="ocelotsloth"> Mark Stenglein - <em>contributor</em> - <a href="https://github.com/ocelotsloth">ocelotsloth</a></p>
+<p><img src="https://avatars3.githubusercontent.com/u/1560890?v=4&s=32" alt="andrewpryor"> Andrew Pryor - <em>contributor</em> - <a href="https://github.com/andrewpryor">andrewpryor</a></p>
+<h2 id="contributing">Contributing</h2>
+<ul>
+<li><strong>NEW</strong>: Use a code editor that supports <a href="https://prettier.io/">Prettier</a> and the included <code>.prettierrc.yml</code></li>
+<li>Follow the existing code formatting (2 spaces, not tabs, no hanging brackets, no semicolons, etc)</li>
+<li>Comment your code to explain anything more complex than a routine action</li>
+<li>Provide rationale for any changes you request</li>
+<li>Use thorough commit/pull request messages</li>
+</ul>
+<h3 id="active-branches">Active Branches</h3>
+<p><strong>main</strong> (<em>stable</em>) all features in this branch are fully implemented and ready to go</p>
+<p><strong>api</strong> (<em>unstable</em>) this branch implements receiver grouping and remote control by splitting all functions out into an independent REST API</p>
+<p><strong>rotation</strong> (<em>stable</em>) this branch adds the ability to display channels at 90/180/270 degress of rotation</p>
+<p><strong>authentication</strong> (<em>unstable</em>) this branch adds a login page and POST/DELETE request verification</p>
+<p><strong>logging</strong> (<em>unstable</em>) this branch adds real-time logging &amp; monitoring of all console/page-load errors from receiver devices back to Multicast&#39;s web interface</p>
+<h3 id="creating-layouts">Creating Layouts</h3>
+<p>Creating a channel layout is simple, and consists of two things:</p>
+<p><strong>CSS Layout</strong></p>
+<p>Copy <code>app/views/layouts/template.pug</code> and change the name to your new channel layout name (e.g. - <code>my-layout.pug</code>).</p>
+<p>Change the class applied to the body to the name of your channel layout (e.g. - <code>body.my-layout</code>).</p>
+<p>In <code>build/css/channel.css</code>, add rules to style each <code>iframe</code> in your layout, prefixing each with <code>body.<em>layout-name</em></code>, replacing <em>layout-name</em> with your layout name. Refer to the existing rules for inspiration.</p>
+<p><strong>NOTE</strong>: Channel sections are currently limited to 4 per channel. To increase this, change <code>maxSectionCount</code> on <code>app/views/channel.pug</code>. </p>
+<p><strong>CSS Icon Design</strong></p>
+<p>In <code>app/views/channel.pug</code>, add a div under <code>#channel-layout</code> with the class <code>layout</code> and <code><em>layout-name</em></code>, again replacing <em>layout-name</em> with your layout name. Make sure this div has the class <code>active</code> when the channel is using your layout, as such:</p>
+<pre><code>.layout.<em>layout-name</em>(class=(channel && channel.layout == '<em>layout-name</em>' ? 'active' : ''))</code></pre>
+
+<p>Style this div in <code>build/css/channel-edit.css</code> to conform to the existing channel layouts:</p>
+<pre><code class="language-css">width: 250px;
+height: 150px;
+border: 1px solid rgb(202, 206, 215);</code></pre>
+<p>Once you finish, don&#39;t forget to <code>gulp</code> everything to apply your new layout.</p>
+<h2 id="license">License</h2>
+<p>This project is licensed under the MIT License - see <a href="LICENSE">LICENSE</a> for more details.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Special thanks to <a href="https://github.com/groupon/greenscreen">Greenscreen</a> and the team over at Groupon for inspiring this product.</p>
