@@ -1,0 +1,18 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    link(href='https://fonts.googleapis.com/css?family=Fira+Sans:400,700|Merriweather', rel='stylesheet')
+    link(href='../node_modules/normalize.css/normalize.css', rel='stylesheet')
+    link(href='index.styl', rel='stylesheet')
+    title Multicast
+
+  body
+    #page-wrapper
+      include components/Hero.pug
+      include components/Links.pug
+      include components/Documentation.pug
+
+    include components/Footer.pug
+
+    script(src='index.js', type='text/javascript')

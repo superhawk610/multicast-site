@@ -1,0 +1,107 @@
+green = #66b66a
+gray = #9e9e9e
+darkgray = #555
+lightgray = #e4e4e4
+light = #f5f5f5
+
+@import 'components/Hero.styl'
+@import 'components/Links.styl'
+
+html, body
+  width 100%
+  height 100%
+  box-sizing border-box
+  font-family 'Merriweather', serif
+
+body
+  background light
+
+#page-wrapper
+  margin 0 auto
+  padding 25px
+  padding-top 100px
+  max-width 600px
+
+h1, h2
+  margin-top 0
+
+h1
+  font-family 'Fira Sans', sans-serif
+  font-weight 700
+  margin-bottom 0
+  color green
+
+h2
+  font-size 1.3em
+  color darkgray
+
+h3
+  font-family 'Fira Sans', sans-serif
+  font-weight 700
+  font-size 1.4em
+  margin-bottom 0
+  color green
+
+h4
+  margin-bottom 0
+  color darkgray
+
+p
+  color darkgray
+  line-height 1.4em
+  font-size 0.85em
+
+hr
+  display block
+  height 0
+  width 100%
+  background transparent
+  border none
+  border-bottom 1px solid lightgray
+  margin-bottom 25px
+
+.spacer
+  display block
+  width 100%
+  height 40px
+
+#readme
+  padding-bottom 50px
+
+  h2
+    margin-top 50px
+
+  img
+    max-width 100%
+
+  a
+    color green
+    text-decoration none
+
+    > img
+      height 15px
+
+  pre
+    background lightgray
+    overflow-x auto
+    padding 15px
+    font-size 0.7em
+
+    > code
+      padding 0
+      background transparent
+
+  code
+    background lightgray
+    padding 2px 5px 1px
+
+#footer
+  color darkgray
+  background lightgray
+  padding 50px 25px
+  font-size 0.75em
+  text-align center
+
+  a
+    color green
+    text-decoration none
