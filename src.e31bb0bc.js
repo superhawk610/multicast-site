@@ -117,7 +117,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var renderTarget = document.getElementById('readme');
 
-var renderMarkdown = _README.default.replace(':green_heart:', "<img src=\"".concat(_greenHeart.default, "\" style=\"height: 12px\" />"));
+var renderMarkdown = _README.default.replace(':green_heart:', "<img src=\"".concat(_greenHeart.default, "\" style=\"height: 15px\" />"));
 
 renderTarget.innerHTML = renderMarkdown;
 },{"./README.md":"README.md","./images/green-heart.png":"images/green-heart.png"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -147,7 +147,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38645" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41687" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
